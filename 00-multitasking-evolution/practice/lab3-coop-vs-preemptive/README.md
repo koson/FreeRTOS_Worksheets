@@ -158,6 +158,45 @@ void test_cooperative_multitasking(void)
     
     cooperative_scheduler();
 }
+
+void app_main(void)
+{
+    ESP_LOGI(TAG, "=== FreeRTOS Cooperative Multitasking Demo ===");
+    
+    // GPIO Configuration for LEDs
+    gpio_config_t led_conf = {
+        .intr_type = GPIO_INTR_DISABLE,
+        .mode = GPIO_MODE_OUTPUT,
+        .pin_bit_mask = (1ULL << LED1_PIN) | (1ULL << LED2_PIN) | (1ULL << LED3_PIN),
+        .pull_down_en = 0,
+        .pull_up_en = 0,
+    };
+    gpio_config(&led_conf);
+    
+    // GPIO Configuration for Button
+    gpio_config_t btn_conf = {
+        .intr_type = GPIO_INTR_DISABLE,
+        .mode = GPIO_MODE_INPUT,
+        .pin_bit_mask = (1ULL << BUTTON_PIN),
+        .pull_down_en = 0,
+        .pull_up_en = 1,  // Enable pull-up for button
+    };
+    gpio_config(&btn_conf);
+    
+    // Initialize all LEDs to OFF
+    gpio_set_level(LED1_PIN, 0);
+    gpio_set_level(LED2_PIN, 0);
+    gpio_set_level(LED3_PIN, 0);
+    
+    ESP_LOGI(TAG, "GPIO configured:");
+    ESP_LOGI(TAG, "- LED1: GPIO %d", LED1_PIN);
+    ESP_LOGI(TAG, "- LED2: GPIO %d", LED2_PIN);
+    ESP_LOGI(TAG, "- LED3: GPIO %d", LED3_PIN);
+    ESP_LOGI(TAG, "- Button: GPIO %d (Pull-up enabled)", BUTTON_PIN);
+    
+    // Start the cooperative multitasking demonstration
+    test_cooperative_multitasking();
+}
 ```
 
 ### Part 2: Preemptive Multitasking (15 นาที)
